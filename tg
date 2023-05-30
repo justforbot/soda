@@ -1,0 +1,39 @@
+pip install python-telegram-bot
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+
+# Функция-обработчик для команды /start
+def start(update, context):
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Привет! Добро пожаловать в бота!")
+
+# Функция-обработчик для команды /anketa
+def anketa(update, context):
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Давайте заполним анкету. Как вас зовут?")
+
+# Функция-обработчик для текстовых сообщений
+def echo(update, context):
+    context.bot.send_message(chat_id=update.effective_chat.id, text=update.message.text)
+
+def main():
+    # Создаем экземпляр бота и передаем API-ключ
+    updater = Updater(token='6106320908:AAFRJHSbi0tV7NDA4uZvid5LJJsDH5bMCXY', use_context=True)
+    dispatcher = updater.dispatcher
+
+    # Добавляем обработчики команд
+    start_handler = CommandHandler('start', start)
+    dispatcher.add_handler(start_handler)
+
+    anketa_handler = CommandHandler('anketa', anketa)
+    dispatcher.add_handler(anketa_handler)
+
+    # Добавляем обработчик текстовых сообщений
+    echo_handler = MessageHandler(Filters.text, echo)
+    dispatcher.add_handler(echo_handler)
+
+    # Запускаем бота
+    updater.start_polling()
+
+    # Останавливаем бота при нажатии Ctrl+C
+    updater.idle()
+
+if __name__ == '__main__':
+    main()
